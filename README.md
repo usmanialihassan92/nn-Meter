@@ -57,7 +57,8 @@ Start **Docker Desktop**, then open a terminal in the project folder.
 
 Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/nn-Meter.git cd nn-Meter
+git clone https://github.com/usmanialihassan92/nn-Meter.git
+cd nn-Meter
 ```
 Build the Docker environment:
 ```bash
