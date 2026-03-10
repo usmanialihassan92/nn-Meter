@@ -42,11 +42,12 @@ Example usage:
 python material/exportmodels/export_pytorch_to_onnx.py
 
 After exporting, place the ONNX model inside the `onnx` folder:
-
+```bash
 nn-Meter/
 ├── main.py
 ├── onnx/
 │   └── mobilenetv3.onnx
+```
 
 ------------------------------------------------------------------------
 
@@ -94,17 +95,17 @@ Results will be saved automatically:
 output/latency_results.csv
 
 Example output:
-
+```bash
 Model,Predictor,Latency (ms),FPS
 mobilenetv3small_simplified.onnx,cortexA76cpu_tflite21,--,--
 mobilenetv3small_simplified.onnx,adreno640gpu_tflite21,--,--
 mobilenetv3small_simplified.onnx,adreno630gpu_tflite21,--,--
 mobilenetv3small_simplified.onnx,myriadvpu_openvino2019r2,--,--
-
+```
 ------------------------------------------------------------------------
 
 # 5. Project Structure
-
+```bash
 nn-Meter/
 ├── Dockerfile
 ├── main.py
@@ -118,7 +119,7 @@ nn-Meter/
 │   └── your_model.onnx 
 ├── output/
 │   └── latency_results.csv
-
+```
 ------------------------------------------------------------------------
 
 # License
