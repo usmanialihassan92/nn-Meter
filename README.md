@@ -1,3 +1,139 @@
+# nn-Meter Benchmark Extension
+
+This repository is a **fork of Microsoft's nn-Meter project** and
+includes additional tools for **ONNX-based latency benchmarking**.
+
+Additional features added in this fork:
+
+-   Automated **ONNX model simplification**
+-   Support for benchmarking **multiple hardware predictors**
+-   CSV latency report generation
+-   Example scripts for **exporting PyTorch and TensorFlow models to
+    ONNX**
+-   Reproducible **Docker environment**
+
+The goal is to simplify the workflow:
+
+PyTorch / TensorFlow model → Export to ONNX → Run nn-Meter latency
+prediction → Generate benchmarking CSV report
+
+------------------------------------------------------------------------
+
+# 1. Export Your Model to ONNX
+
+Before running the benchmark, export your model to **ONNX format**.
+
+Required libraries:
+
+-   torch
+-   torchvision
+-   tensorflow
+-   tf2onnx
+-   onnx
+-   onnxsim
+
+Example export scripts are provided:
+
+material/exportmodels/export_pytorch_to_onnx.py
+material/exportmodels/export_tensorflow_to_onnx.py
+
+Example usage:
+
+python material/exportmodels/export_pytorch_to_onnx.py
+
+After exporting, place the ONNX model inside the `onnx` folder:
+
+nn-Meter/
+├── main.py
+├── onnx/
+│   └── mobilenetv3.onnx
+
+------------------------------------------------------------------------
+
+# 2. Run Benchmark Using Docker
+
+Start **Docker Desktop**, then open a terminal in the project folder.
+
+Clone the repository:
+```bash
+git clone https://github.com/YOUR_USERNAME/nn-Meter.git cd nn-Meter
+```
+Build the Docker environment:
+```bash
+docker build -t nn-meter-env .
+```
+Run the container:
+```bash
+docker run -it -v %cd%:/app nn-meter-env
+```
+Run the benchmark script:
+```bash
+docker run -it -v %cd%:/app nn-meter-env python main.py
+```
+------------------------------------------------------------------------
+
+# 3. Benchmark Multiple Hardware Predictors
+
+To evaluate all supported predictors:
+```bash
+python main.py --predictor all
+```
+Supported predictors include:
+
+-   cortexA76cpu_tflite21
+-   adreno640gpu_tflite21
+-   adreno630gpu_tflite21
+-   myriadvpu_openvino2019r2
+
+------------------------------------------------------------------------
+
+# 4. Benchmark Results
+
+Results will be saved automatically:
+
+output/latency_results.csv
+
+Example output:
+
+Model,Predictor,Latency (ms),FPS
+mobilenetv3small_simplified.onnx,cortexA76cpu_tflite21,--,--
+mobilenetv3small_simplified.onnx,adreno640gpu_tflite21,--,--
+mobilenetv3small_simplified.onnx,adreno630gpu_tflite21,--,--
+mobilenetv3small_simplified.onnx,myriadvpu_openvino2019r2,--,--
+
+------------------------------------------------------------------------
+
+# 5. Project Structure
+
+nn-Meter/
+├── Dockerfile
+├── main.py
+├── requirements.txt
+├── material/
+│   ├── exportmodels/
+│   │   ├── export_pytorch_to_onnx.py
+│   │   └── export_tensorflow_to_onnx.py
+├── onnx/ 
+│   ├── mobilenetv3small.onnx
+│   └── your_model.onnx 
+├── output/
+│   └── latency_results.csv
+
+------------------------------------------------------------------------
+
+# License
+
+This repository is based on the original **Microsoft nn-Meter project**,
+which is licensed under the **MIT License**.
+
+---
+
+# Original nn-Meter Documentation
+
+The following sections are from the original nn-Meter repository
+developed by Microsoft Research.
+------------------------------------------------------------------------
+
 **nn-Meter** is a novel and efficient system to accurately predict the inference latency of DNN models on diverse edge devices. The key idea is dividing a whole model inference into kernels, i.e., the execution units of fused operators on a device, and conduct kernel-level prediction. We currently evaluate four popular platforms on a large dataset of 26k models. It achieves 99.0% (mobile CPU), 99.1% (mobile Adreno 640 GPU), 99.0% (mobile Adreno 630 GPU), and 83.4% (Intel VPU) prediction accuracy.
 
 The current supported hardware and inference frameworks:
